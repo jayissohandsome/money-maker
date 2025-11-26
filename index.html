@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>賺錢機器</title>
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="賺錢機器">
+
+    <meta name="theme-color" content="#0d0d0d">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2910/2910795.png">
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2910/2910795.png">
+
+    <style>
+        /* CSS 樣式: 綠色主題，已優化 */
+        :root {
+            --bg-color: #0d0d0d;
+            --card-bg: #1a1a1a;
+            --text-color: #FFFFFF;
+            --subtle-text: #AAAAAA; 
+            --main-green: #00E676; 
+            --main-green-light: #00FF8C; 
+            --main-red: #ff3d00;
+            --border-color: #333333;
+            --input-bg: #222222;
+            --button-bg: linear-gradient(90deg, var(--main-green), #00AA55); 
+            --button-hover-bg: linear-gradient(90deg, #00AA55, #008844);
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            background-image: radial-gradient(circle at center, rgba(0,230,118,0.1) 0%, transparent 70%); 
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            /* 防止 iOS 點擊閃爍 */
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 18px; 
+            box-shadow: 0 8px 30px rgba(0,0,0,0.6); 
+            max-width: 450px; 
+            width: 100%;
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden; 
+            z-index: 1;
+            box-sizing: border-box; /* 確保 padding 不會撐大寬度 */
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            right: -50px;
+            bottom: -50px;
+            background: radial-gradient(circle at top left, rgba(0,230,118,0.08) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+            border-radius: 18px;
+        }
+        
+        h1 {
+            color: var(--text-color);
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1; 
+        }
+        h1 span {
+            background: linear-gradient(90deg, var(--main-green-light), var(--main-green)); 
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(0,230,118,0.4);
+        }
+
+        .info-box {
+            background-color: #2a2a2a; 
+            color: var(--subtle-text);
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            font-size: 0.9em;
+            text-align: center;
+            border: 1px solid #444;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .input-group {
+            margin-bottom: 18px;
+            position: relative;
+            z-index: 1;
+        }
+        label {
+            color: var(--subtle-text);
+            font-size: 0.95em;
+            margin-bottom: 6px;
+            display: block;
+            transition: color 0.3s;
+        }
+        .price-label {
+            color: var(--main-green) !important;
+            text-shadow: 0 0 5px rgba(0,230,118,0.4);
+        }
+
+        input[type="number"] {
+            width: 100%; 
+            padding: 14px; /* 手機版加大觸控區 */
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--input-bg);
+            color: var(--text-color); 
+            font-size: 1.1em; /* 字體加大 */
+            box-sizing: border-box;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.4);
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        input[type="number"]:focus {
+            border-color: var(--main-green); 
+            box-shadow: 0 0 12px rgba(0,230,118,0.5), inset 0 2px 5px rgba(0,0,0,0.4);
+            outline: none;
+        }
+        
+        button {
+            background: var(--button-bg); 
+            color: var(--text-color);
+            padding: 16px 25px; /* 按鈕加大 */
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(0,230,118,0.4); 
+            position: relative;
+            z-index: 1;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: var(--button-hover-bg);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,230,118,0.6);
+        }
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        .results {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 18px;
+            margin-top: 25px;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .results::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            right: -50px;
+            bottom: -50px;
+            background: radial-gradient(circle at top left, rgba(0,230,118,0.08) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+            border-radius: 18px;
+        }
+
+        .results h2 {
+            color: var(--text-color);
+            text-align: left; 
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(90deg, var(--main-green-light), var(--main-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 8px rgba(0,230,118,0.4);
+        }
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0; /* 增加間距 */
+            border-bottom: 1px solid #2a2a2a; 
+            font-size: 1em;
+            position: relative;
+            z-index: 1;
+        }
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        .result-label {
+            color: var(--subtle-text);
+        }
+        .result-value {
+            font-weight: bold;
+            color: var(--text-color); 
+        }
+        
+        .value-green { 
+            color: var(--main-green-light); 
+            text-shadow: 0 0 8px rgba(0, 230, 118, 0.4); 
+            font-size: 1.1em;
+        }
+        .value-red { 
+            color: var(--main-red); 
+            text-shadow: 0 0 8px rgba(255,61,0,0.4);
+        }
+        .value-blue { 
+            color: var(--main-green-light);
+            text-shadow: 0 0 8px rgba(0, 230, 118, 0.4);
+        }
+        
+        .warning-box {
+            background-color: #3d0000; 
+            color: var(--main-red);
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 0.9em;
+            text-align: center;
+            border: 1px solid var(--main-red);
+            box-shadow: 0 0 8px rgba(255,61,0,0.5);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 隱藏原生數字箭頭 */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><span>交易計算機</span></h1>
+
+        <div class="info-box">
+            輸入目標獲利，自動計算倉位與風險 (RR 2:1)
+        </div>
+
+        <div class="input-group">
+            <label for="maxProfit">0. 目標獲利總額 (Profit Target) (USDT):</label>
+            <input type="number" id="maxProfit" step="1" placeholder="例如: 20 (預設)">
+        </div>
+        <div class="input-group">
+            <label for="maxCapital">1. 本金預算 (Max Capital) (USDT):</label>
+            <input type="number" id="maxCapital" step="1" placeholder="例如: 50">
+        </div>
+        
+        <div class="input-group">
+            <label for="entryPrice" class="price-label">2. 開倉價格 (Entry Price):</label>
+            <input type="number" id="entryPrice" step="0.01" placeholder="例如: 160.00">
+        </div>
+        <div class="input-group">
+            <label for="slPrice" class="price-label">3. 止損價格 (SL Price):</label>
+            <input type="number" id="slPrice" step="0.01" placeholder="例如: 161.00">
+        </div>
+        <div class="input-group">
+            <label for="tp1Price" class="price-label">4. 止盈價格 TP1:</label>
+            <input type="number" id="tp1Price" step="0.01" placeholder="例如: 159.00">
+        </div>
+        <div class="input-group">
+            <label for="tp2Price" class="price-label">5. 止盈價格 TP2:</label>
+            <input type="number" id="tp2Price" step="0.01" placeholder="例如: 158.00">
+        </div>
+
+        <button onclick="calculateTrade()">計算指令</button>
+    </div>
+
+    <div id="results" class="results" style="display:none;">
+        <h2>📊 計算結果</h2>
+        <div class="result-item"><span class="result-label">交易方向:</span><span id="outputDirection" class="result-value"></span></div>
+        <div class="result-item"><span class="result-label">最低所需槓桿:</span><span id="outputLeverage" class="result-value"></span></div>
+        <div class="result-item"><span class="result-label">投入保證金 (本金):</span><span id="outputMargin" class="result-value"></span></div>
+        <div class="result-item"><span class="result-label">開倉數量:</span><span id="outputQuantity" class="result-value"></span></div>
+        <div class="result-item"><span class="result-label">--------------------</span><span class="result-value"></span></div>
+        <div class="result-item"><span class="result-label">SL 價格:</span><span id="outputSLPrice" class="result-value"></span></div>
+        <div class="result-item"><span class="result-label">SL 虧損金額 (1R):</span><span id="outputSLRisk" class="result-value value-red"></span></div>
+        <div class="result-item"><span class="result-label">--------------------</span><span class="result-value"></span></div>
+        <div class="result-item"><span class="result-label">TP1 價格:</span><span id="outputTP1Price" class="result-value"></span></div>
+        <div class="result-item"><span class="result-label">TP1 預計獲利:</span><span id="outputTP1Profit" class="result-value value-green"></span></div>
+        <div class="result-item"><span class="result-label">TP2 價格:</span><span id="outputTP2Price" class="result-value"></span></div>
+        <div class="result-item"><span class="result-label">TP2 預計獲利:</span><span id="outputTP2Profit" class="result-value value-green"></span></div>
+        <div class="result-item"><span class="result-label">目標總獲利 (TP1+TP2):</span><span id="outputTotalProfit" class="result-value value-green"></span></div>
+        
+        <div id="capitalWarning" class="warning-box" style="display:none;"></div>
+    </div>
+
+    <script>
+        // JavaScript 邏輯
+        function formatNumber(num) {
+            if (num === 0) return '0';
+            if (num % 1 === 0) {
+                return num.toFixed(0);
+            }
+            return num.toFixed(2);
+        }
+
+        function calculateTrade() {
+            // 讀取用戶輸入
+            const maxProfitInput = document.getElementById('maxProfit').value;
+            const maxProfitTarget = maxProfitInput === '' ? 20.0 : parseFloat(maxProfitInput);
+            
+            const maxCapital = parseFloat(document.getElementById('maxCapital').value);
+            const entryPrice = parseFloat(document.getElementById('entryPrice').value);
+            const slPrice = parseFloat(document.getElementById('slPrice').value);
+            const tp1Price = parseFloat(document.getElementById('tp1Price').value);
+            const tp2Price = parseFloat(document.getElementById('tp2Price').value);
+
+            // 輸入驗證
+            if (isNaN(maxProfitTarget) || isNaN(maxCapital) || isNaN(entryPrice) || isNaN(slPrice) || isNaN(tp1Price) || isNaN(tp2Price)) {
+                alert('請確保所有欄位都已填寫有效數字！');
+                return;
+            }
+            
+            // 1. 動態計算 1R 風險金額 (1R = 總獲利 / 2)
+            const calculatedRisk = maxProfitTarget / 2;
+
+            // 2. 基礎風險距離計算
+            const riskDistance = Math.abs(entryPrice - slPrice);
+
+            if (riskDistance === 0) {
+                alert('入場價格與止損價格不能相同！');
+                return;
+            }
+
+            // 3. 交易方向
+            const direction = slPrice > entryPrice ? "做空 (Short)" : "做多 (Long)";
+
+            // 4. 計算開倉數量 (張數)
+            const contractQuantity = calculatedRisk / riskDistance;
+
+            // 5. 計算最小所需槓桿
+            const totalValue = contractQuantity * entryPrice;
+            const requiredLeverage = totalValue / maxCapital;
+
+            // 6. 計算 TP 獲利分配 (根據距離比例分配目標獲利總額)
+            const tp1ProfitDistance = Math.abs(entryPrice - tp1Price);
+            const tp2ProfitDistance = Math.abs(entryPrice - tp2Price);
+            const totalProfitDistance = tp1ProfitDistance + tp2ProfitDistance;
+
+            if (totalProfitDistance === 0) {
+                 alert('TP1 和 TP2 必須不同於 Entry 價格！');
+                 return;
+            }
+
+            // 分配總獲利金額到 TP1 和 TP2
+            const tp1AllocationRatio = tp1ProfitDistance / totalProfitDistance;
+            const tp2AllocationRatio = tp2ProfitDistance / totalProfitDistance;
+            
+            const tp1Profit = maxProfitTarget * tp1AllocationRatio;
+            const tp2Profit = maxProfitTarget * tp2AllocationRatio;
+            
+            // 顯示結果
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('outputDirection').textContent = direction;
+            document.getElementById('outputDirection').className = direction === "做空 (Short)" ? "result-value value-red" : "result-value value-green";
+            
+            document.getElementById('outputLeverage').textContent = `${formatNumber(requiredLeverage)}x`;
+            document.getElementById('outputLeverage').className = requiredLeverage > 100 ? "result-value value-red" : "result-value value-blue";
+
+            document.getElementById('outputMargin').textContent = `${formatNumber(maxCapital)} USDT`; 
+            document.getElementById('outputMargin').className = "result-value value-green"; 
+            
+            document.getElementById('outputQuantity').textContent = `${formatNumber(contractQuantity)}`;
+            
+            document.getElementById('outputSLPrice').textContent = formatNumber(slPrice);
+            document.getElementById('outputSLRisk').textContent = `-${formatNumber(calculatedRisk)} USDT`; 
+
+            document.getElementById('outputTP1Price').textContent = formatNumber(tp1Price);
+            document.getElementById('outputTP2Price').textContent = formatNumber(tp2Price);
+
+            document.getElementById('outputTP1Profit').textContent = `+${formatNumber(tp1Profit)} USDT`; 
+            document.getElementById('outputTP2Profit').textContent = `+${formatNumber(tp2Profit)} USDT`; 
+            
+            document.getElementById('outputTotalProfit').textContent = `+${formatNumber(tp1Profit + tp2Profit)} USDT`; 
+
+            // 資金檢查
+            const capitalWarning = document.getElementById('capitalWarning');
+            if (requiredLeverage > 100) {
+                capitalWarning.style.display = 'block';
+                capitalWarning.textContent = `⚠️ 警告：所需槓桿 (${formatNumber(requiredLeverage)}x) 超出 100x 限制，此倉位無法執行！請拉大止損距離。`;
+            } else {
+                capitalWarning.style.display = 'none';
+            }
+            
+            // 手機版優化：計算後自動滾動到結果區
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
